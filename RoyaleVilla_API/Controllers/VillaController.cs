@@ -6,10 +6,17 @@ namespace RoyaleVilla_API.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
-        [HttpGet()]
+        [HttpGet]
         public string GetVillas()
         {
             return "Here are all Villas !";
         }
+
+        [HttpGet("{ID:int}")]
+        public string GetVillaByID(int ID)
+        {
+            return "Get Villa : " +ID;
+        }
+
     }
 }
