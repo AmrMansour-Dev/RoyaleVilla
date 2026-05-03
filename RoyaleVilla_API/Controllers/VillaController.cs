@@ -22,9 +22,32 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpGet("{ID:int}")]
-        public string GetVillaByID(int ID)
+        public ActionResult<Villa> GetVillaByID(int ID)
         {
-            return "Get Villa : " +ID;
+            try
+            {
+                if(ID <= 0)
+                {
+                    return BadRequest("Villa ID Must Be Greater Than 0");
+                }
+                else
+                {
+                    var villaobj = _db.Villas.FirstOrDefault(V=>V.Id == ID);
+
+                    if(villaobj == null)
+                    {
+                        return NotFound($"No User Is Found with The ID: {ID}");
+                    }
+                    else
+                    {
+                        return Ok(villaobj);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An Error Occured While Retrieving Villa With ID {ID}:{ex.Message}");
+            }
         }
 
     }
