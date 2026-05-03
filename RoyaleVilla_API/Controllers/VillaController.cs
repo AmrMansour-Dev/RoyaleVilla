@@ -85,7 +85,7 @@ namespace RoyaleVilla_API.Controllers
                     await _db.Villas.AddAsync(Villaobj);
                     await _db.SaveChangesAsync();
 
-                    return Ok(Villaobj);
+                    return CreatedAtAction(nameof(GetVillaByID), new {ID = Villaobj.Id},Villaobj);
                 }
             }
             catch (Exception ex)
