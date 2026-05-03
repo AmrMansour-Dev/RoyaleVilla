@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RoyaleVilla_API.Data;
 using RoyaleVilla_API.Models;
@@ -11,9 +12,11 @@ namespace RoyaleVilla_API.Controllers
     public class VillaController : ControllerBase
     {
         private readonly ApplicationDBContext _db;
-        public VillaController(ApplicationDBContext db)
+        private readonly IMapper _mapper;
+        public VillaController(ApplicationDBContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -62,16 +65,23 @@ namespace RoyaleVilla_API.Controllers
                 }
                 else
                 {
-                    Villa Villaobj = new Villa()
-                    {
-                        Name = VillaDTO.Name,
-                        Details = VillaDTO.Details,
-                        Rate = VillaDTO.Rate,
-                        CreatedDate = DateTime.Now,
-                        Sqft = VillaDTO.Sqft,
-                        Occupancy = VillaDTO.Occupancy,
-                        ImageUrl = VillaDTO.ImageUrl
-                    };
+                    //The Following CODE Used Without Mapper :
+
+                    //Villa Villaobj = new Villa()
+                    //{
+                    //    Name = VillaDTO.Name,
+                    //    Details = VillaDTO.Details,
+                    //    Rate = VillaDTO.Rate,
+                    //    CreatedDate = DateTime.Now,
+                    //    Sqft = VillaDTO.Sqft,
+                    //    Occupancy = VillaDTO.Occupancy,
+                    //    ImageUrl = VillaDTO.ImageUrl
+                    //};
+
+                    // With Mapper:
+
+                    Villa Villaobj = _mapper.Map<Villa>(VillaDTO);
+
                     await _db.Villas.AddAsync(Villaobj);
                     await _db.SaveChangesAsync();
 
