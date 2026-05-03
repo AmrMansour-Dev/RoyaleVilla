@@ -32,6 +32,7 @@ app.MapControllers();
 
 app.Run();
 
+//apply pending migration to database
 static async Task SeedDataAsync(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
