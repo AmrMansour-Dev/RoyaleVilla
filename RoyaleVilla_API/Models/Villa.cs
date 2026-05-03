@@ -1,8 +1,12 @@
-﻿namespace RoyaleVilla_API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RoyaleVilla_API.Models
 {
     public class Villa
     {
         public int Id { get; set; }
+
+        [Required]
         public required string Name { get; set; }
         public string? Details { get; set; }
         public double Rate { get; set; }
