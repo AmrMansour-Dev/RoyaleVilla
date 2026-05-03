@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RoyaleVilla_API.Data;
 using RoyaleVilla_API.Models;
+using RoyaleVilla_API.Models.DTO;
 
 namespace RoyaleVilla_API.Controllers
 {
@@ -51,16 +52,26 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Villa>> CreateVilla(Villa Villaobj)
+        public async Task<ActionResult<Villa>> CreateVilla(VillaCreateDTO VillaDTO)
         {
             try
             {
-                if (Villaobj == null)
+                if (VillaDTO == null)
                 {
                     return BadRequest("Villa data is REQUIRED!");
                 }
                 else
                 {
+                    Villa Villaobj = new Villa()
+                    {
+                        Name = VillaDTO.Name,
+                        Details = VillaDTO.Details,
+                        Rate = VillaDTO.Rate,
+                        CreatedDate = DateTime.Now,
+                        Sqft = VillaDTO.Sqft,
+                        Occupancy = VillaDTO.Occupancy,
+                        ImageUrl = VillaDTO.ImageUrl
+                    };
                     await _db.Villas.AddAsync(Villaobj);
                     await _db.SaveChangesAsync();
 
