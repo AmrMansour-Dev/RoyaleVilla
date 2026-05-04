@@ -19,7 +19,11 @@ namespace RoyaleVilla_API.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<IEnumerable<VillaDTO>>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+
         public async Task<ActionResult<ApiResponse<IEnumerable<VillaDTO>>>> GetVillas()
         {
             var villas = await _db.Villas.ToListAsync();
@@ -31,6 +35,10 @@ namespace RoyaleVilla_API.Controllers
 
 
         [HttpGet("{ID:int}")]
+        [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+
         public async Task <ActionResult<ApiResponse<VillaDTO>>> GetVillaByID(int ID)
         {
             try
@@ -62,6 +70,10 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> CreateVilla(VillaCreateDTO VillaDTO) // We used VillaDTO Instead of VillaCreateDTO To pass the ID
         {
             try
@@ -113,6 +125,11 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpPut("{ID}")]
+        [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ApiResponse<VillaDTO>>> UpdateVilla(int ID, VillaUpdateDTO VillaDTO)
         {
             try
@@ -160,6 +177,9 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpDelete("{ID}")]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ApiResponse<object>>> DeleteVilla(int ID)
         {
             try
