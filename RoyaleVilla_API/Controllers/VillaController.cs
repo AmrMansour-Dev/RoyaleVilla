@@ -117,6 +117,14 @@ namespace RoyaleVilla_API.Controllers
                         return NotFound($"Villa With {ID} is not found");
                     }
 
+                    Villa DuplicateVilla = await _db.Villas.FirstOrDefaultAsync(V=>V.Name.ToLower() == VillaDTO.Name.ToLower() &&
+                    V.Id != ID);
+
+                    if(DuplicateVilla != null)
+                    {
+                        return Conflict($"Villa With Name: {VillaDTO.Name} already Exists!");
+                    }
+
                     _mapper.Map(VillaDTO, ExistingVilla);
                     ExistingVilla.UpdatedDate = DateTime.Now;
 
