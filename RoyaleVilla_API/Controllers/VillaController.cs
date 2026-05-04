@@ -20,13 +20,15 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Villa>>> GetVillas()
+        public async Task<ActionResult<IEnumerable<VillaDTO>>> GetVillas()
         {
-            return Ok(await _db.Villas.ToListAsync());
+            var villas = await _db.Villas.ToListAsync();
+
+            return Ok(_mapper.Map<List<VillaDTO>>(villas));
         }
 
         [HttpGet("{ID:int}")]
-        public ActionResult<Villa> GetVillaByID(int ID)
+        public ActionResult<VillaDTO> GetVillaByID(int ID)
         {
             try
             {
@@ -44,7 +46,7 @@ namespace RoyaleVilla_API.Controllers
                     }
                     else
                     {
-                        return Ok(villaobj);
+                        return Ok(_mapper.Map<VillaDTO>(villaobj));
                     }
                 }
             }
@@ -55,7 +57,7 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Villa>> CreateVilla(VillaCreateDTO VillaDTO)
+        public async Task<ActionResult<VillaDTO>> CreateVilla(VillaCreateDTO VillaDTO) // We used VillaDTO Instead of VillaCreateDTO To pass the ID
         {
             try
             {
@@ -92,7 +94,7 @@ namespace RoyaleVilla_API.Controllers
                     await _db.Villas.AddAsync(Villaobj);
                     await _db.SaveChangesAsync();
 
-                    return CreatedAtAction(nameof(GetVillaByID), new { ID = Villaobj.Id }, Villaobj);
+                    return CreatedAtAction(nameof(GetVillaByID), new { ID = Villaobj.Id }, _mapper.Map<VillaDTO>(Villaobj));
                 }
             }
             catch (Exception ex)
@@ -102,7 +104,7 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpPut("{ID}")]
-        public async Task<ActionResult<Villa>> UpdateVilla(int ID, VillaUpdateDTO VillaDTO)
+        public async Task<ActionResult<VillaUpdateDTO>> UpdateVilla(int ID, VillaUpdateDTO VillaDTO)
         {
             try
             {
@@ -147,7 +149,7 @@ namespace RoyaleVilla_API.Controllers
         }
 
         [HttpDelete("{ID}")]
-        public async Task<ActionResult<Villa>> DeleteVilla(int ID)
+        public async Task<ActionResult> DeleteVilla(int ID)
         {
             try
             {
