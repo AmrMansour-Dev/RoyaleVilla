@@ -80,6 +80,13 @@ namespace RoyaleVilla_API.Controllers
 
                     // With Mapper:
 
+                    var DuplicateVilla = await _db.Villas.FirstOrDefaultAsync(V => V.Name.ToLower() == VillaDTO.Name.ToLower());
+
+                    if (DuplicateVilla != null)
+                    {
+                        return Conflict($"Villa With Name: {VillaDTO.Name} already Exists!");
+                    }
+
                     Villa Villaobj = _mapper.Map<Villa>(VillaDTO);
 
                     await _db.Villas.AddAsync(Villaobj);
