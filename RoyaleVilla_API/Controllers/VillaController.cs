@@ -30,15 +30,15 @@ namespace RoyaleVilla_API.Controllers
         {
             try
             {
-                if(ID <= 0)
+                if (ID <= 0)
                 {
                     return BadRequest("Villa ID Must Be Greater Than 0");
                 }
                 else
                 {
-                    var villaobj = _db.Villas.FirstOrDefault(V=>V.Id == ID);
+                    var villaobj = _db.Villas.FirstOrDefault(V => V.Id == ID);
 
-                    if(villaobj == null)
+                    if (villaobj == null)
                     {
                         return NotFound($"No User Is Found with The ID: {ID}");
                     }
@@ -48,7 +48,7 @@ namespace RoyaleVilla_API.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An Error Occured While Retrieving Villa With ID {ID}:{ex.Message}");
             }
@@ -85,12 +85,75 @@ namespace RoyaleVilla_API.Controllers
                     await _db.Villas.AddAsync(Villaobj);
                     await _db.SaveChangesAsync();
 
-                    return CreatedAtAction(nameof(GetVillaByID), new {ID = Villaobj.Id},Villaobj);
+                    return CreatedAtAction(nameof(GetVillaByID), new { ID = Villaobj.Id }, Villaobj);
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An Error Occured While Creating Villa:{ex.Message}");
+            }
+        }
+
+        [HttpPut("{ID}")]
+        public async Task<ActionResult<Villa>> UpdateVilla(int ID, VillaUpdateDTO VillaDTO)
+        {
+            try
+            {
+                if (VillaDTO == null)
+                {
+                    return BadRequest("Villa data is REQUIRED!");
+                }
+
+                if (VillaDTO.Id != ID)
+                {
+                    return BadRequest("Villa ID in Url Does Not Match Villa ID in Request Body!");
+                }
+                else
+                {
+                    Villa ExistingVilla = await _db.Villas.FirstOrDefaultAsync(V => V.Id == ID);
+
+                    if (ExistingVilla == null)
+                    {
+                        return NotFound($"Villa With {ID} is not found");
+                    }
+
+                    _mapper.Map(VillaDTO, ExistingVilla);
+                    ExistingVilla.UpdatedDate = DateTime.Now;
+
+                    await _db.SaveChangesAsync();
+
+                    return Ok(VillaDTO);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An Error Occured While Updating Villa:{ex.Message}");
+            }
+        }
+
+        [HttpDelete("{ID}")]
+        public async Task<ActionResult<Villa>> DeleteVilla(int ID)
+        {
+            try
+            {
+
+                Villa ExistingVilla = await _db.Villas.FirstOrDefaultAsync(V => V.Id == ID);
+
+                if (ExistingVilla == null)
+                {
+                    return NotFound($"Villa With {ID} is not found");
+                }
+
+                _db.Villas.Remove(ExistingVilla);
+
+                await _db.SaveChangesAsync();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An Error Occured While Deleting Villa:{ex.Message}");
             }
         }
 

@@ -17,6 +17,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(options => // we used this to map between DTOs and Models
 {
     options.CreateMap<VillaCreateDTO, Villa>();
+    options.CreateMap<VillaUpdateDTO, Villa>();
 });
 
 var app = builder.Build();
