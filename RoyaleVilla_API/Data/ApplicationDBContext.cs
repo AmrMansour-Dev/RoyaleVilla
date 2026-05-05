@@ -6,6 +6,8 @@ namespace RoyaleVilla_API.Data
     public class ApplicationDBContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<User> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
