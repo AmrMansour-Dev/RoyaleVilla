@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RoyaleVilla_API.Data;
 using RoyaleVilla_API.Models;
 using RoyaleVilla_API.Models.DTO;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace RoyaleVilla_API.Services
 {
@@ -10,11 +15,13 @@ namespace RoyaleVilla_API.Services
     {
         private readonly ApplicationDBContext _DB;
         private readonly IMapper _Mapper;
+        private readonly IConfiguration _configuration;
 
-        public AuthService(ApplicationDBContext DB, IMapper Mapper)
+        public AuthService(ApplicationDBContext DB, IMapper Mapper, IConfiguration configuration)
         {
             _DB = DB;
             _Mapper = Mapper;
+            _configuration = configuration;
         }
         public async Task<bool> IsEmailExistsAsync(string email)
         {
@@ -33,11 +40,12 @@ namespace RoyaleVilla_API.Services
                 }
 
                 //Generate token
+                var token = GenerateJWTToken(user);
 
                 return new LoginResponseDTO()
                 {
                     UserDTO = _Mapper.Map<UserDTO>(user),
-                    Token = ""
+                    Token = token
                 };
 
             }
@@ -74,6 +82,30 @@ namespace RoyaleVilla_API.Services
                 throw new InvalidOperationException("An unexpected error occured while user registeration", ex);
             }
 
+        }
+
+        private string GenerateJWTToken(User user)
+        {
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWT")["Secret"]);
+
+            var JWTdescriptor = new SecurityTokenDescriptor() // here we define the recipe of the token : claims,expiration,signingcredentials
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role),
+                    new Claim(ClaimTypes.Name, user.Name)
+                }),
+                Expires = DateTime.Now.AddDays(2),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            };
+
+            var tokenhandler = new JwtSecurityTokenHandler();
+
+            var token = tokenhandler.CreateToken(JWTdescriptor);
+
+            return tokenhandler.WriteToken(token); // here we make it compace (header.payload.signature)
         }
     }
 }
