@@ -21,9 +21,30 @@ namespace RoyaleVilla_API.Services
             return await _DB.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
 
-        public Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO loginRequestDTO)
+        public async Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO loginRequestDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _DB.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginRequestDTO.EmailAddress.ToLower());
+
+                if (user == null || user.Password != loginRequestDTO.Password)
+                {
+                    return null;
+                }
+
+                //Generate token
+
+                return new LoginResponseDTO()
+                {
+                    UserDTO = _Mapper.Map<UserDTO>(user),
+                    Token = ""
+                };
+
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An unexpected error occured while user trying to login", ex);
+            }
         }
 
         public async Task<UserDTO?> RegisterAsync(RegisterationRequestDTO registerationRequestDTO)
