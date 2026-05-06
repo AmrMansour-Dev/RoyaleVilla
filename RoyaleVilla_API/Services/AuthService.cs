@@ -6,12 +6,12 @@ using RoyaleVilla_API.Models.DTO;
 
 namespace RoyaleVilla_API.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthService : IAuthService
     {
         private readonly ApplicationDBContext _DB;
         private readonly IMapper _Mapper;
 
-        public AuthenticationService(ApplicationDBContext DB, IMapper Mapper)
+        public AuthService(ApplicationDBContext DB, IMapper Mapper)
         {
             _DB = DB;
             _Mapper = Mapper;
