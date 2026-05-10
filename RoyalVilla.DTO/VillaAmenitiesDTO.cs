@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoyaleVilla_API.Models.DTO
+namespace RoyalVilla.DTO
 {
-    public class VillaAmenitiesCreateDTO
+    public class VillaAmenitiesDTO
     {
+        [Key]
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -13,5 +15,7 @@ namespace RoyaleVilla_API.Models.DTO
 
         [Required]
         public int VillaId { get; set; }
+        public string? VillaName { get; set; }
+
     }
 }

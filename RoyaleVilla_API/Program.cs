@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RoyaleVilla_API.Data;
 using RoyaleVilla_API.Models;
-using RoyaleVilla_API.Models.DTO;
+using RoyalVilla.DTO;
 using RoyaleVilla_API.Services;
 using Scalar.AspNetCore;
 using System.Text;

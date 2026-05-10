@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RoyaleVilla_API.Data;
 using RoyaleVilla_API.Models;
-using RoyaleVilla_API.Models.DTO;
+using RoyalVilla.DTO;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;

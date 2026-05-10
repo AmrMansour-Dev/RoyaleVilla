@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RoyaleVilla_API.Data;
-using RoyaleVilla_API.Models.DTO;
 using RoyaleVilla_API.Services;
+using RoyalVilla.DTO;
 
 namespace RoyaleVilla_API.Controllers
 {

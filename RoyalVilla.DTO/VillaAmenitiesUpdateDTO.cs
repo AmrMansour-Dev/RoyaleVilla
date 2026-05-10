@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RoyaleVilla_API.Models.DTO
+namespace RoyalVilla.DTO
 {
     public class VillaAmenitiesUpdateDTO
     {
