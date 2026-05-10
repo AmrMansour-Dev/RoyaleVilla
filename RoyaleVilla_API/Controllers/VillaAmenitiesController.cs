@@ -113,7 +113,89 @@ namespace RoyaleVilla_API.Controllers
             }
         }
 
-      
+        [HttpPut("{ID}")]
+        [ProducesResponseType(typeof(ApiResponse<VillaAmenitiesDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+
+        public async Task<ActionResult<ApiResponse<VillaAmenitiesDTO>>> UpdateVillaAmenities(int ID, VillaAmenitiesUpdateDTO VillaAmenitiesUpdateDTO)
+        {
+            try
+            {
+                if (VillaAmenitiesUpdateDTO == null)
+                {
+                    return BadRequest(ApiResponse<object>.BadRequest("Villa Amenities data is REQUIRED!"));
+                }
+
+                if (VillaAmenitiesUpdateDTO.Id != ID)
+                {
+                    return BadRequest(ApiResponse<object>.BadRequest("Villa Amenities ID in Url Does Not Match Villa Amenities ID in Request Body!"));
+                }
+                else
+                {
+                    var ExistingVillaAmenities = await _db.Villas.FirstOrDefaultAsync(V => V.Id == VillaAmenitiesUpdateDTO.VillaId);
+
+                    if (ExistingVillaAmenities == null)
+                    {
+                        return NotFound(ApiResponse<object>.NotFound($"Villa With ID '{VillaAmenitiesUpdateDTO.VillaId}' is not exist"));
+                    }
+
+                    var VillaAmenitiesExists = await _db.VillaAmenities.FirstOrDefaultAsync(V => V.Id == ID);
+
+                    if (VillaAmenitiesExists == null)
+                    {
+                        //return Conflict($"VillaAmenities With Name: {VillaAmenitiesDTO.Name} already Exists!");
+                        return Conflict(ApiResponse<object>.Conflict($"Villa Amenities With ID: {VillaAmenitiesUpdateDTO.VillaId} Does not Exists!"));
+                    }
+
+                    _mapper.Map(VillaAmenitiesUpdateDTO, VillaAmenitiesExists);
+                    VillaAmenitiesExists.UpdatedDate = DateTime.Now;
+
+                    await _db.SaveChangesAsync();
+
+                    return Ok(ApiResponse<VillaAmenitiesDTO>.Ok("Villa Amenities Updated Successfully", _mapper.Map<VillaAmenitiesDTO>(VillaAmenitiesExists)));
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorresponse = ApiResponse<object>.Error(500, "", ex.Message);
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorresponse);
+            }
+        }
+
+        [HttpDelete("{ID}")]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ApiResponse<object>>> DeleteVillaAmenities(int ID)
+        {
+            try
+            {
+
+                VillaAmenities ExistingVillaAmenities = await _db.VillaAmenities.FirstOrDefaultAsync(V => V.Id == ID);
+
+                if (ExistingVillaAmenities == null)
+                {
+                    return NotFound(ApiResponse<object>.NotFound($"Villa Amenities With {ID} is not found"));
+                }
+
+                _db.VillaAmenities.Remove(ExistingVillaAmenities);
+
+                await _db.SaveChangesAsync();
+
+                return Ok(ApiResponse<object>.NoContent("Villa Amenities Deleted Successfully!"));
+
+            }
+            catch (Exception ex)
+            {
+                var errorresponse = ApiResponse<object>.Error(500, "Error Occured While Deleting the Villa Ameneties", ex.Message);
+
+                return StatusCode(StatusCodes.Status500InternalServerError, errorresponse);
+            }
+        }
 
     }
 }
