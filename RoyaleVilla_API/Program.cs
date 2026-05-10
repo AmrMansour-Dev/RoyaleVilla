@@ -87,7 +87,7 @@ builder.Services.AddAutoMapper(options => // we used this to map between DTOs an
     options.CreateMap<VillaUpdateDTO, VillaDTO>();
     options.CreateMap<User, UserDTO>();
     options.CreateMap<VillaAmenitiesUpdateDTO, VillaAmenities>();
-    options.CreateMap<VillaAmenitiesUpdateDTO, VillaAmenities>();
+    options.CreateMap<VillaAmenitiesCreateDTO, VillaAmenities>();
     options.CreateMap<VillaAmenities, VillaAmenitiesDTO>().ForMember(dest => dest.VillaName, opt => opt.MapFrom(src => src.Villa!=null? src.Villa.Name:null));
     options.CreateMap<VillaAmenitiesDTO, VillaAmenities>();
 
