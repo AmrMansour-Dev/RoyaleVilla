@@ -6,13 +6,11 @@ namespace RoyalVillaWeb.Services
 {
     public class VillaService : BaseService, IVillaService
     {
-        private readonly IHttpClientFactory _httpclient;
         private readonly string _VillaUrl;
         private const string ApiEndPoint = "/api/villa";
 
         public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
         {
-            _httpclient = httpClient;
             _VillaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
         }
 
