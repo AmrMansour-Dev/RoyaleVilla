@@ -1,9 +1,24 @@
+using RoyalVilla.DTO;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddCors();
+
+builder.Services.AddAutoMapper(options => // we used this to map between DTOs and Models
+{
+    options.CreateMap<VillaCreateDTO, Villa>();
+    options.CreateMap<VillaUpdateDTO, Villa>();
+    options.CreateMap<Villa, VillaDTO>();
+    options.CreateMap<VillaUpdateDTO, VillaDTO>();
+    options.CreateMap<User, UserDTO>();
+    options.CreateMap<VillaAmenitiesUpdateDTO, VillaAmenities>();
+    options.CreateMap<VillaAmenitiesCreateDTO, VillaAmenities>();
+    options.CreateMap<VillaAmenities, VillaAmenitiesDTO>().ForMember(dest => dest.VillaName, opt => opt.MapFrom(src => src.Villa != null ? src.Villa.Name : null));
+    options.CreateMap<VillaAmenitiesDTO, VillaAmenities>();
+
+});
 
 var app = builder.Build();
 
@@ -15,7 +30,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseCors(o=>o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("*"));
 
 app.UseHttpsRedirection();
 
