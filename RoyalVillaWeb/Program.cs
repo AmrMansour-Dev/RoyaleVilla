@@ -1,4 +1,6 @@
 using RoyalVilla.DTO;
+using RoyalVillaWeb.Services;
+using RoyalVillaWeb.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddHttpClient("RoualVillaAPI", Client =>
     Client.BaseAddress = new Uri(VillaAPIurl);
     Client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+builder.Services.AddScoped<IVillaService, VillaService>();
 
 var app = builder.Build();
 
