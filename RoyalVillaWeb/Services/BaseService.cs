@@ -29,7 +29,7 @@ namespace RoyalVillaWeb.Services
                 var message = new HttpRequestMessage()
                 {
                     Method = GetMethodType(apiRequest.ApiType),
-                    RequestUri = new Uri(apiRequest.Url)
+                    RequestUri = new Uri(apiRequest.Url,uriKind:UriKind.Relative)
                 };
                 if(apiRequest.Data != null )
                 {
