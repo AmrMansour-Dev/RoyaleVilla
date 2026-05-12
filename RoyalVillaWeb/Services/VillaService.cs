@@ -6,12 +6,10 @@ namespace RoyalVillaWeb.Services
 {
     public class VillaService : BaseService, IVillaService
     {
-        private readonly string _VillaUrl;
         private const string ApiEndPoint = "/api/villa";
 
         public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
         {
-            _VillaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
         }
 
         public Task<T?> CreateAsync<T>(VillaCreateDTO villaCreateDTO, string Token)
@@ -19,7 +17,7 @@ namespace RoyalVillaWeb.Services
             return SendAsync<T> (new ApiRequest()
             {
                 ApiType = SD.ApiType.Post,
-                Url = $"{_VillaUrl}{ApiEndPoint}",
+                Url = $"{ApiEndPoint}",
                 Token = Token,
                 Data = villaCreateDTO
             });
@@ -30,7 +28,7 @@ namespace RoyalVillaWeb.Services
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Delete,
-                Url = $"{_VillaUrl}{ApiEndPoint}/{ID}",
+                Url = $"{ApiEndPoint}/{ID}",
                 Token = Token
             });
         }
@@ -40,7 +38,7 @@ namespace RoyalVillaWeb.Services
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Get,
-                Url = $"{_VillaUrl}{ApiEndPoint}",
+                Url = $"{ApiEndPoint}",
                 Token = Token
             });
         }
@@ -50,7 +48,7 @@ namespace RoyalVillaWeb.Services
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Get,
-                Url = $"{_VillaUrl}{ApiEndPoint}/{ID}",
+                Url = $"{ApiEndPoint}/{ID}",
                 Token = Token
             });
         }
@@ -60,7 +58,7 @@ namespace RoyalVillaWeb.Services
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Put,
-                Url = $"{_VillaUrl}{ApiEndPoint}/{villaUpdateDTO.Id}",
+                Url = $"{ApiEndPoint}/{villaUpdateDTO.Id}",
                 Token = Token,
                 Data = villaUpdateDTO
             });

@@ -11,7 +11,13 @@ builder.Services.AddAutoMapper(options => // we used this to map between DTOs an
     options.CreateMap<VillaCreateDTO, VillaDTO>();
     options.CreateMap<VillaUpdateDTO, VillaDTO>();
 
+});
 
+builder.Services.AddHttpClient("RoualVillaAPI", Client =>
+{
+    var VillaAPIurl = builder.Configuration.GetValue<string>("ServiceUrls:VillaAPI");
+    Client.BaseAddress = new Uri(VillaAPIurl);
+    Client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
 var app = builder.Build();
