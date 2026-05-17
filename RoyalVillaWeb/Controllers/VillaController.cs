@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVilla.DTO;
 using RoyalVillaWeb.Models;
@@ -9,10 +10,13 @@ namespace RoyalVillaWeb.Controllers
     public class VillaController : Controller
     {
         private IVillaService _villaservice;
+        private readonly IMapper _Mapper;
 
-        public VillaController(IVillaService villaService)
+
+        public VillaController(IVillaService villaService, IMapper mapper)
         {
             _villaservice = villaService;
+            _Mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
@@ -63,6 +67,52 @@ namespace RoyalVillaWeb.Controllers
             return View(villaCreateDTO);
         }
 
+
+          public async Task<IActionResult> Edit(int ID)
+          {
+            if (ID <= 0)
+            {
+                TempData["Errors"] = "Invalid Villa ID";
+                return RedirectToAction("Index");
+            }
+            try
+            {
+                var response = await _villaservice.GetAsync<ApiResponse<VillaDTO>>(ID, "");
+
+                if (response != null && response.Success && response.Data != null)
+                {
+                    return View(_Mapper.Map<VillaUpdateDTO>(response.Data));
+                }
+            }
+            catch(Exception ex)
+            {
+
+                TempData["Errors"] = $"An error occured:{ex.Message}";
+            }
+
+
+            return View();
+          }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(VillaUpdateDTO villaupdateDTO)
+        {
+            try
+            {
+                var response = await _villaservice.UpdateAsync<ApiResponse<object>>(villaupdateDTO, "");
+                if (response != null && response.Success && response.Data !=null)
+                {
+                    TempData["Success"] = $"Villa Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = $"An error occured:{ex.Message}";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
         public async Task<IActionResult> Delete(int ID)
         {
             if (ID <= 0)

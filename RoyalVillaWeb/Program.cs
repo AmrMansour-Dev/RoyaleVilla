@@ -12,6 +12,7 @@ builder.Services.AddAutoMapper(options => // we used this to map between DTOs an
 {
     options.CreateMap<VillaCreateDTO, VillaDTO>();
     options.CreateMap<VillaUpdateDTO, VillaDTO>();
+    options.CreateMap<VillaDTO, VillaUpdateDTO>();
 
 });
 
