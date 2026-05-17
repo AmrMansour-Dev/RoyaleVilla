@@ -24,6 +24,8 @@ builder.Services.AddHttpClient("RoualVillaAPI", Client =>
 });
 
 builder.Services.AddScoped<IVillaService, VillaService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 var app = builder.Build();
 
