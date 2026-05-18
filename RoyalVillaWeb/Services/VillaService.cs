@@ -12,54 +12,49 @@ namespace RoyalVillaWeb.Services
         {
         }
 
-        public Task<T?> CreateAsync<T>(VillaCreateDTO villaCreateDTO, string Token)
+        public Task<T?> CreateAsync<T>(VillaCreateDTO villaCreateDTO)
         {
             return SendAsync<T> (new ApiRequest()
             {
                 ApiType = SD.ApiType.Post,
                 Url = $"{ApiEndPoint}",
-                Token = Token,
                 Data = villaCreateDTO
             });
         }
 
-        public Task<T?> DeleteAsync<T>(int ID, string Token)
+        public Task<T?> DeleteAsync<T>(int ID)
         {
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Delete,
-                Url = $"{ApiEndPoint}/{ID}",
-                Token = Token
+                Url = $"{ApiEndPoint}/{ID}"
             });
         }
 
-        public Task<T?> GetAllAsync<T>(string Token)
+        public Task<T?> GetAllAsync<T>()
         {
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Get,
-                Url = $"{ApiEndPoint}",
-                Token = Token
+                Url = $"{ApiEndPoint}"
             });
         }
 
-        public Task<T?> GetAsync<T>(int ID, string Token)
+        public Task<T?> GetAsync<T>(int ID)
         {
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Get,
-                Url = $"{ApiEndPoint}/{ID}",
-                Token = Token
+                Url = $"{ApiEndPoint}/{ID}"
             });
         }
 
-        public Task<T?> UpdateAsync<T>(VillaUpdateDTO villaUpdateDTO, string Token)
+        public Task<T?> UpdateAsync<T>(VillaUpdateDTO villaUpdateDTO)
         {
             return SendAsync<T>(new ApiRequest()
             {
                 ApiType = SD.ApiType.Put,
                 Url = $"{ApiEndPoint}/{villaUpdateDTO.Id}",
-                Token = Token,
                 Data = villaUpdateDTO
             });
         }

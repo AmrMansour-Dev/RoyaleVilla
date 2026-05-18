@@ -19,7 +19,7 @@ namespace RoyalVillaWeb.Controllers
             List<VillaDTO> villaslist = new List<VillaDTO>();
             try
             {
-                var response = await _villaservice.GetAllAsync<ApiResponse<List<VillaDTO>>>("");
+                var response = await _villaservice.GetAllAsync<ApiResponse<List<VillaDTO>>>();
                 if(response != null && response.Success && response.Data != null)
                 {
                     villaslist = response.Data;

@@ -24,7 +24,7 @@ namespace RoyalVillaWeb.Controllers
             List<VillaDTO> villaslist = new List<VillaDTO>();
             try
             {
-                var response = await _villaservice.GetAllAsync<ApiResponse<List<VillaDTO>>>("");
+                var response = await _villaservice.GetAllAsync<ApiResponse<List<VillaDTO>>>();
                 if(response != null && response.Success && response.Data != null)
                 {
                     villaslist = response.Data;
@@ -56,7 +56,7 @@ namespace RoyalVillaWeb.Controllers
             }
             try
             {
-                var response = await _villaservice.CreateAsync<ApiResponse<VillaDTO>>(villaCreateDTO, "");
+                var response = await _villaservice.CreateAsync<ApiResponse<VillaDTO>>(villaCreateDTO);
                 if (response != null && response.Success && response.Data != null)
                 {
                     TempData["Success"] = $"Villa Created Successfully";
@@ -82,7 +82,7 @@ namespace RoyalVillaWeb.Controllers
             }
             try
             {
-                var response = await _villaservice.GetAsync<ApiResponse<VillaDTO>>(ID, "");
+                var response = await _villaservice.GetAsync<ApiResponse<VillaDTO>>(ID);
 
                 if (response != null && response.Success && response.Data != null)
                 {
@@ -107,7 +107,7 @@ namespace RoyalVillaWeb.Controllers
         {
             try
             {
-                var response = await _villaservice.UpdateAsync<ApiResponse<object>>(villaupdateDTO, "");
+                var response = await _villaservice.UpdateAsync<ApiResponse<object>>(villaupdateDTO);
                 if (response != null && response.Success && response.Data !=null)
                 {
                     TempData["Success"] = $"Villa Updated Successfully";
@@ -131,7 +131,7 @@ namespace RoyalVillaWeb.Controllers
             }
             try
             {
-                var response = await _villaservice.GetAsync<ApiResponse<VillaDTO>>(ID, "");
+                var response = await _villaservice.GetAsync<ApiResponse<VillaDTO>>(ID);
 
                 if (response != null && response.Success && response.Data != null)
                 {
@@ -155,7 +155,7 @@ namespace RoyalVillaWeb.Controllers
         {
             try
             {
-                var response = await _villaservice.DeleteAsync<ApiResponse<object>>(villaDTO.Id, "");
+                var response = await _villaservice.DeleteAsync<ApiResponse<object>>(villaDTO.Id);
                 if (response != null && response.Success)
                 {
                     TempData["Success"] = $"Villa Deleted Successfully";
