@@ -10,7 +10,7 @@ namespace RoyaleVilla_API.Controllers
 {
     [Route("api/Villa")]
     [ApiController]
-    //[Authorize(Roles = "Customer, Admin")]
+    [Authorize]
     public class VillaController : ControllerBase
     {
         private readonly ApplicationDBContext _db;
