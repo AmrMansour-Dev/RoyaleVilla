@@ -48,6 +48,8 @@ namespace RoyalVillaWeb.Controllers
                     var principal = new ClaimsPrincipal(Identity);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
+
+                    HttpContext.Session.SetString("JWTToken", loginResponseDTO.Token);
                     return RedirectToAction("Index","Home");
 
 
