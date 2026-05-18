@@ -6,7 +6,7 @@ namespace RoyalVillaWeb.Services
 {
     public class AuthService : BaseService, IAuthService
     {
-        private const string ApiEndPoint = "/api/villa";
+        private const string ApiEndPoint = "/api/Authentication";
 
         public AuthService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
         {
@@ -27,7 +27,8 @@ namespace RoyalVillaWeb.Services
             {
                 ApiType = SD.ApiType.Post,
                 Url = $"{ApiEndPoint}" + "/register",
-                Data = registerationRequestDTO
+                Data = registerationRequestDTO,
+                
             });
         }
     }

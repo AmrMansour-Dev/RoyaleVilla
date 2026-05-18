@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using RoyalVilla.DTO;
 using RoyalVillaWeb.Models;
 using RoyalVillaWeb.Services.IServices;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace RoyalVillaWeb.Controllers
 {
@@ -31,7 +36,27 @@ namespace RoyalVillaWeb.Controllers
                 var response = await _authaservice.LoginAsync<ApiResponse<LoginResponseDTO>>(loginRequestDTO);
                 if (response != null && response.Success && response.Data != null)
                 {
-                    LoginResponseDTO model = response.Data;
+                    LoginResponseDTO loginResponseDTO = response.Data;
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt = handler.ReadJwtToken(loginResponseDTO.Token);
+
+                    var Identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    Identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.First(U => U.Type == "email").Value));
+                    Identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.First(U => U.Type == "role").Value));
+
+                    var principal = new ClaimsPrincipal(Identity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
+                    return RedirectToAction("Index","Home");
+
+
+                }
+                else
+                {
+                    TempData["Errors"] ="Username/Password is incorrect, Try Again!";
+                    return View(loginRequestDTO);
+
                 }
             }
             catch (Exception ex)
@@ -53,9 +78,40 @@ namespace RoyalVillaWeb.Controllers
             });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterationRequestDTO registerationRequestDTO)
+        {
+
+            try
+            {
+                var response = await _authaservice.RegisterAsync<ApiResponse<UserDTO>>(registerationRequestDTO);
+                if (response != null && response.Success && response.Data != null)
+                {
+                    TempData["Success"] = "Registeration Successfull! Please login with your credentials";
+                    return RedirectToAction(nameof(Login));
+                }
+                else
+                {
+                    TempData["Errors"] = response?.Message?? "Registeration failed, Try Again!";
+                    return View(registerationRequestDTO);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Errors"] = $"An error occured:{ex.Message}";
+            }
+
+            return View(registerationRequestDTO);
+        }
+
+
         public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
         }
 
     }
