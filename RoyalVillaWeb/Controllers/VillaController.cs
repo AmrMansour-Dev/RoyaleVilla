@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoyalVilla.DTO;
 using RoyalVillaWeb.Models;
@@ -37,11 +38,14 @@ namespace RoyalVillaWeb.Controllers
             return View(villaslist);
         }
 
+
+        [Authorize(Roles = "Admin")]
         public  IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VillaCreateDTO villaCreateDTO)
@@ -68,7 +72,8 @@ namespace RoyalVillaWeb.Controllers
         }
 
 
-          public async Task<IActionResult> Edit(int ID)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int ID)
           {
             if (ID <= 0)
             {
@@ -94,6 +99,8 @@ namespace RoyalVillaWeb.Controllers
             return View();
           }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(VillaUpdateDTO villaupdateDTO)
@@ -113,6 +120,8 @@ namespace RoyalVillaWeb.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int ID)
         {
             if (ID <= 0)
@@ -139,6 +148,7 @@ namespace RoyalVillaWeb.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(VillaDTO villaDTO)

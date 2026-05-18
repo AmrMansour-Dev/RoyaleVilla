@@ -10,7 +10,6 @@ namespace RoyaleVilla_API.Controllers
 {
     [Route("api/Villa")]
     [ApiController]
-    [Authorize]
     public class VillaController : ControllerBase
     {
         private readonly ApplicationDBContext _db;
@@ -73,6 +72,7 @@ namespace RoyaleVilla_API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
@@ -128,6 +128,7 @@ namespace RoyaleVilla_API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{ID}")]
         [ProducesResponseType(typeof(ApiResponse<VillaDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
@@ -180,6 +181,7 @@ namespace RoyaleVilla_API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{ID}")]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]

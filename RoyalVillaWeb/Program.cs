@@ -36,6 +36,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.SlidingExpiration = true;
     options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/accessdenied";
 });
 
 builder.Services.AddScoped<IVillaService, VillaService>();
