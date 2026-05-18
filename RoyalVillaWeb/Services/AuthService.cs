@@ -8,7 +8,7 @@ namespace RoyalVillaWeb.Services
     {
         private const string ApiEndPoint = "/api/Authentication";
 
-        public AuthService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public AuthService(IHttpClientFactory httpClient, IConfiguration configuration,IHttpContextAccessor httpContextAccessor) : base(httpClient, httpContextAccessor)
         {
         }
         public Task<T?> LoginAsync<T>(LoginRequestDTO loginRequestDTO)

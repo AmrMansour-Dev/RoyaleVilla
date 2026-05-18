@@ -8,7 +8,7 @@ namespace RoyalVillaWeb.Services
     {
         private const string ApiEndPoint = "/api/villa";
 
-        public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public VillaService(IHttpClientFactory httpClient, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) : base(httpClient,httpContextAccessor)
         {
         }
 
